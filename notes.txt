@@ -1,0 +1,60 @@
+GraphQL (Links to an external site.) 
+is a query language for APIs and a runtime for fulfilling queries with your existing data, 
+giving clients the power to ask for exactly what they need and nothing more. 
+For this module’s application, you’ll use the graphql (Links to an external site.) and graphql-tag (Links to an external site.) 
+packages to parse GraphQL queries within your React front end
+
+Apollo Server (Links to an external site.) is an open-source, 
+spec-compliant GraphQL server that's compatible with any GraphQL client, 
+including Apollo Client (Links to an external site.), the client you’ll use in your MERN application. 
+You’ll use the apollo-server-express (Links to an external site.) package to integrate GraphQL into your Express.js server, 
+the apollo-boost (Links to an external site.) package to make requests from your React front end to the GraphQL API, 
+and the @apollo/react-hooks (Links to an external site.) package to use React hooks with Apollo queries and mutations.
+
+React Router (Links to an external site.) is a collection of navigational components 
+that compose declaratively with your application, allowing you to make your single-page 
+React applications behave more like multi-page applications. 
+You’ll use the react-router-dom (Links to an external site.) npm package to work with React Router in your applications.
+
+The if-env (Links to an external site.) npm package allows you to simplify development, running the correct 
+scripts based on the environment you’re working in (development and production) with minimal setup and only a few lines of code.
+
+The concurrently (Links to an external site.) npm package allows you to run multiple processes, or servers, 
+ a single command-line interface. Rather than opening multiple terminals to start the multiple servers, 
+ you can run them both at the same time. 
+It also allows you to keep track of different outputs in one place, 
+and will stop all of your processes if even one of them fails.
+
+jwt-decode (Links to an external site.) is an npm package that helps decode JWTs from their Base64Url encoding. 
+You’ll use it to extract non-sensitive data such as the token’s expiration date to see if 
+it’s expired before making a request to the server.
+
+The nodemon (Links to an external site.) package simplifies your development environment by 
+automatically restarting your Node.js applications when file changes in the directory are detected.
+we will have integrated a Node.js-specific GraphQL library 
+called Apollo Server to query all of data from our database using a single API endpoint.
+
+This will allow us to query multiple resources of data with a single HTTP request and test 
+our API using a built-in tool called GraphQL Playground, as this image shows:
+
+With MERN-stack applications, like the one we're building, we need to work with two servers while we're in development
+We'll run a back-end server to host our database and API,
+and we need a separate server for React development. 
+We need to use webpack to transpile our JSX and components into browser-ready code. Create React App sets this up for us.
+This server uses Mongoose for all of its MongoDB data handling, but instead of connecting to the database right from server.js, 
+it's actually handling the connection in the config/connection.js file
+
+In server.js, we import that connection. Then when we run our server, we listen for that connection to be made with db.open(). 
+Upon a successful connection, we start the server.
+
+Mongoose way of bcrypt is different than sequelize
+Just like Express.js, Mongoose implements something called middleware to capture our data before 
+getting to or coming from the database and manipulating it.
+This way we can use this same middleware for both new users and users who are updating their 
+information but don't want to update their password values.
+
+The match option is a type of validation that allows us to use regex to test the input value. 
+In our case, we are using a regex pattern to test 
+if the data being entered to the email field is in fact a valid email address that follows the pattern <string>@<string>.<string>. 
+The order of operations in this seed.js file is important because we need user data before we can create thought, reaction, or friend data.
+Modern social media applications work with tons of data, most of the time on a single page. 

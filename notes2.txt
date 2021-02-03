@@ -1,0 +1,113 @@
+GraphQL
+Most applications at the time didn't have so many features and demands for a 
+dynamic interface in the same way today's applications do, 
+so the HTTP requests between client and server were more sparse and less taxing on the user's connection.
+
+The main reason is that RESTful API endpoints serve either too much or too little data.
+To solve this using REST APIs, we'd have to create way more endpoint permutations for all of our data needs.
+With GraphQL, we essentially set up a single API endpoint where we can retrieve as 
+much or as little data as we need from multiple resources such as databases,
+microservices, or even other third-party APIs, all in a single HTTP request.
+
+GraphQL isn't tied to a specific language. 
+Instead, it is its own language specification that we can integrate into the language of our choosing.
+Apollo is popular because it has both a server-side and client-side library that we can work with
+Express.js-specific version of the Apollo server library:
+With REST APIs, we implement our CRUD actions through the HTTP verbs GET, POST, PUT, and DELETE. 
+With GraphQL, however, we split these four actions into the following two categories:
+
+Queries: Queries are how we perform GET requests and ask for data from a GraphQL API.
+
+Mutations: Mutations are how we perform POST, PUT, and DELETE requests to create or manipulate data through a GraphQL API.
+
+The setup of a GraphQL API involves defining two very important things which work in unison:
+
+Type definitions: Type definitions, or TypeDefs for short, involves literally defining every piece of data that the client can expect 
+to work with through a query or mutation. Every GraphQL API starts with defining this data, as this type of strict type definition 
+will give the client more clarity as to what they are asking for and what they can expect in return. 
+Think of this as not only defining the API endpoint, but also defining the exact data and parameters that are tied to that endpoint.
+
+Resolvers: Resolvers are simply the functions we connect to each query or 
+mutation type definition that perform the CRUD actions that each query or mutation is expected to perform.
+
+The two of these together form what's known as a schema. 
+create a subdirectory called schemas with three files in it: typeDefs.js, resolvers.js, and index.js, 
+index.js which will serve as the file to collect the other two files and export them.
+First, we import the gql tagged template function from apollo-server-express
+
+Tagged templates are an advanced use of template literals, and were introduced with ES6 as well. 
+All of our type definitions will go into the typeDefs tagged template function.
+
+To define a query, you use the type Query {} data type, which is built into GraphQL. 
+ot only that, we also explicitly specified that the type of data to be returned by this query will be a string.
+All type definitions need to specify what type of data is expected in return, no matter what.
+
+GraphQL has built-in data types known as scalars.
+Now that we have our query set up, we need to set up the resolver that will serve the response for the helloWorld query.
+
+just a simple object called resolvers with a Query nested object that holds a series of methods.
+These methods get the same name of the query or mutation they are resolvers for. 
+Lastly, let's get our Apollo server hooked into our existing 
+Express.js server and set it up with our type definitions and resolvers.
+
+With the new ApolloServer() function, we provide the 
+type definitions and resolvers so they know what our API looks like and how it resolves requests. 
+
+
+We then connect our Apollo server to our Express.js server. This will create a special /graphql endpoint for the Express.js 
+server that will serve as the main endpoint for accessing the entire API.
+the /graphql endpoint also has a built-in testing tool we can use
+
+to start server npm run watch
+What nodemon does is essentially the same as what the webpack development server does for Create React App: 
+it listens for any file changes and restarts the server, allowing us to avoid having to constantly stop and start the server.
+By just using the nodemon command, it implicitly looks for whatever file is listed under main in package.json, 
+so make sure it's set to server.js
+
+This is the GraphQL Playground, 
+a built-in tool that's automatically set up with the Apollo server and lets us use our GraphQL queries and mutations.
+
+we can create our own custom types that define what we want to have returned from this query.
+we're instructing our query that we'll return an array, as noted by the [] square brackets around the returning data, Thought. 
+With GraphQL queries like this that return a custom type-definition, we need to be explicit about the data that we want returned.
+
+Look up by Username
+type Query {
+  thoughts(username: String): [Thought]
+}
+With this, we've now defined our thoughts query that it could receive a parameter if we wanted. 
+
+Keep in mind that the way we set this up will allow us to query thoughts with or without the username parameter. 
+Here, we pass in the parent as more of a placeholder parameter. It won't be used, 
+but we need something in that first parameter's spot so we can access the username argument from the second parameter.
+
+We use a ternary operator to check if username exists. 
+ If it does, we set params to an object with a username key set to that value. If it doesn't, we simply return an empty object.
+
+A resolver can accept four arguments in the following order:
+
+parent: This is if we used nested resolvers to handle more complicated actions, 
+as it would hold the reference to the resolver that executed the nested resolver function. 
+We won't need this throughout the project, but we need to include it as the first argument.
+
+args: This is an object of all of the values passed into a query or mutation request as parameters. 
+In our case, we destructure the username parameter out to be used.
+
+context: This will come into play later. If we were to need the same data to be accessible by all resolvers, 
+such as a logged-in user's status or API access token, this data will come through this context parameter as an object.
+
+info: This will contain extra information about an operation's current state. This isn't used as frequently, 
+but it can be implemented for more advanced uses.
+
+Because reactions is a nested array of the Reaction type, we need to again be explicit as to what data we want returned. 
+The addition of these GraphQL type definitions, however, add that client-facing layer which provides users with a level of predictability and expectations.
+Notice the exclamation point ! after the query parameter data type definitions?
+That indicates that for that query to be carried out, that data must exist. 
+
+
+Again, this is a great feature of GraphQL. We have a single function that will return every single piece of data 
+associated with a user, 
+but none of it will be returned unless we explicitly list those fields when we perform our queries. 
+
+
+We could use something called query variables to make this request feel more like an actual function. 
