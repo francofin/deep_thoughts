@@ -119,6 +119,8 @@ First, we check to see if the Node environment is in production.
 If it is, we instruct the Express.js server to serve any files in the React application's build directory in the client folder. 
 The next set of functionality we created was a wildcard GET route for the server. 
 In other words, if we make a GET request to any location on the server that doesn't have an explicit route defined, respond with the production-ready React front-end code.
+Notice the 0's and 1's being printed alongside the command-line output? That's concurrently's way of indicating which process is doing what.
+The process labeled with a 0 will be the server output, and the process labeled with a 1 will be the client output. 
 
 
 

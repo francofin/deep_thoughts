@@ -1,0 +1,33 @@
+Fortunately, there are libraries like React 
+Router that can add client-side routing to your application while keeping the single-page responsiveness that React is known for. 
+
+In the client folder, run the following command:
+
+npm install react-router-dom
+ For web-based projects, however, react-router-dom has everything you need in it.
+ BrowserRouter and Route are components that the React Router library provides.
+A few things have changed. We've wrapped the <div className="flex-column"> element in a Router component, 
+which makes all of the child components on the page aware of the client-side routing that can take place now
+This would mean any route that hasn't been defined would be treated as a 404 and respond with your custom 404.html file.
+
+With React Router, you can use another component from the library called Switch that will allow you to set a catch-all route. 
+This is very similar to a JavaScript switch statement that has a default case.
+We've wrapped all of the Route components in a Switch component and included one more Route at the end to render the NoMatch component.
+ If the route doesn't match any of the preceding paths (e.g., /about), then users will see the 404 message.
+ Instead, you can use React Router's Link component. This component will change the URL while staying on the same page.
+ You'll see that in the real DOM, the Link becomes a regular <a> element.
+
+Fortunately, React Router supports URL parameters. This is very similar to using parameters in Express.js on the back end.
+<Route exact path="/profile/:username?" component={Profile} />
+<Route exact path="/thought/:id" component={SingleThought} />
+The ? means this parameter is optional, so /profile and /profile/myUsername will both render the Profile component. 
+Later on, we'll set up /profile to display the logged-in user's information.
+How would you access the ID from the URL, though? You could use something like document.location to parse out the ID, 
+but React Router has a better method built in.
+
+
+ The useQuery Hook was given a second argument in the form of an object
+ This is how you can pass variables to queries that need them.
+ The id property on the variables object will become the $id parameter in the GraphQL query.
+ The useParams Hook retrieves the username from the URL, which is then passed to the useQuery Hook
+ 
