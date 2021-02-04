@@ -1,0 +1,129 @@
+By the end of this lesson, we'll have integrated React, and we'll have thought data displayed to 
+users using Apollo's client-side library for consuming a GraphQL API.
+
+But wait—the root of the entire deep-thoughts directory only contains the server folder as of right now. 
+So where will we place the client side of the application?
+That's right, we'll create a client folder!
+We used npx to run npm library commands instead of installing them locally. 
+This way, we'll get to use the latest version of that library. 
+Using npx, we're temporarily installing create-react-app, then it will be removed from the machine on completion.
+
+Instead, we'll use Apollo Boost, a library that Apollo created for making requests to GraphQL APIs using Apollo Server. 
+To make everything work in unison with Apollo Boost, 
+npm i apollo-boost graphql graphql-tag @apollo/react-hooks
+
+A variation of the standard Apollo Client library that also includes other helper libraries, a
+Apollo-boost will serve as the means of making requests to the server.
+
+GraphQL (graphql) is a dependency much like MySQL2 was for Sequelize. 
+We don't use it directly, but it needs to be present for the other libraries to work.
+
+graphql-tag is a package that will help parse the client-side tagged template literal statements for queries and mutations.
+
+@apollo/apollo-hooks is Apollo's library for using React Hooks functionality with Apollo queries and mutations. 
+We have to include the @apollo/ prefix because apollo-hooks is never used on its own—only alongside other Apollo libraries.
+To begin integrating Apollo into the front end of the application, navigate to App.js in the client directory. 
+Add the following import statements to the top of the file:
+import React from 'react';
+
+// add these two library import statements
+import { ApolloProvider } from '@apollo/react-hooks';
+import ApolloClient from 'apollo-boost';
+
+The first, ApolloProvider, is a special type of React component that we'll use to provide data to all of the other components.
+ApolloClient, to get that data when we're ready to use it.
+we need to establish the connection to the back-end server's /graphql endpoint.
+
+With this code, we establish a new connection to the GraphQL server using Apollo.
+Note how we wrap the entire returning JSX code with <ApolloProvider>.
+
+Because we're passing the client variable in as the value for the client prop in the provider, 
+everything between the JSX tags will eventually have access to the server's API data through the client we set up.
+As we saw earlier when we built the server, we'll use multiple GraphQL queries and mutations with this application. 
+
+In the src directory, create a new folder called utils. This folder will serve as a location to hold code and functionality that isn't necessarily React-based
+This file will store all of the GraphQL query requests. (queries.js in utils)
+
+The query we just wrote will be used on the homepage of the application; let's import it and put it to use there.
+Navigate to the Home.js file in the pages directory. After opening it, add the following import statements near the top of the page:
+
+import { useQuery } from '@apollo/react-hooks';
+import { QUERY_THOUGHTS } from '../utils/queries';
+With these statements, we're importing the useQuery Hook from Apollo's React Hooks library.
+
+This will allow us to make requests to the GraphQL server we connected 
+to and made available to the application using the <ApolloProvider> component in App.js earlier.
+When we load the Home component in the application, we'll execute the query for the thought data. 
+Because this is asynchronous, just like using fetch(), Apollo's react-hooks library provides a loading property to indicate that the request isn't done just yet. 
+ When it's finished and we have data returned from the server, that information is stored in the destructured data property.
+ But with the loading property, we'll be able to conditionally render data based on whether or not there is data to even display.
+
+ Next we'll get the thought data out of the query's response, because every GraphQL response comes in a big data object. 
+
+  In this case, we'll need to access data.thoughts
+So what's this weird syntax? This is called optional chaining
+Optional chaining negates the need to check if an object even exists before accessing its properties.
+In this case, no data will exist until the query to the server is finished.
+React app's App.js file establishes a connection to localhost:3001/graphql and supplies it to the <ApolloProvider> component,
+the homepage will be able to use the QUERY_THOUGHTS query on load.
+Due to the asynchronous nature of the request, the first few logs printed are empty arrays.
+
+Notice how we also check to see the value of thought.reactionCount. 
+We're conditionally displaying a message to contextualize what the call to action should be.
+If there are no reactions, the user will start the discussion by adding the first reaction
+With this, we use a ternary operator to conditionally render the <ThoughtList> component
+ Once the query is complete and loading is undefined, we pass the thoughts array and a custom title to the <ThoughtList> component as props.
+ n the App.js file, we use the absolute path to the server when we initialize the connection using the ApolloClient() constructor. 
+ With this proxy value in place, the Create React App team set up the development 
+ server to prefix all HTTP requests using relative paths 
+/graphql instead of http://localhost:3001/graphql
+Now the HTTP requests will work in both development and production environments!
+
+ Save App.js and then open the package.json file in the client directory. 
+ Once that's open, add one more key-value pair towards the top of the JSON object that looks like the following code:
+
+"proxy": "http://localhost:3001",
+
+Set Up Application Root Functionality
+
+Instead, we'll create a third application using npm.
+This application will simply control the other two applications.
+t the root directory of deep-thoughts, create a new application using npm init or npm init -y. 
+One will be a regular dependency; the other will be a development dependency. Run the following commands:
+# install if-env library
+npm install if-env
+
+#install concurrently library as a dependency for development environment only
+npm install -D concurrently
+
+The if-env tool is used not through JavaScript itself but rather in the package.json file.
+It'll check what environment we're in and execute a select npm script based on the response.
+
+We can use the concurrently package to run multiple processes, or servers, from a single command line interface.
+Lastly, we need to add some scripts to this root-level package.json file to put these tools to use.
+
+From the command line, when we run npm start, we employ if-env to check if the Node environment is production. 
+If it is, we'll run the npm run start:prod command; otherwise, we'll run the npm run start:dev command.
+
+The start:prod script will be used in production
+It simply navigates to the server directory and runs the server's npm start command. 
+We use concurrently to run two separate commands, each one wrapped in its own quotation marks.
+
+The install script is interesting, as it's already a built-in script that works well. 
+But with this one, we can use npm i or npm install to first install all of the dependencies at this root level. 
+Then it navigates to the server directory and installs those dependencies. 
+Lastly, it navigates to the client directory to install those dependencies as well.
+
+Added to server.js
+First, we check to see if the Node environment is in production.
+If it is, we instruct the Express.js server to serve any files in the React application's build directory in the client folder. 
+The next set of functionality we created was a wildcard GET route for the server. 
+In other words, if we make a GET request to any location on the server that doesn't have an explicit route defined, respond with the production-ready React front-end code.
+
+
+
+
+
+
+
+
